@@ -1,0 +1,81 @@
+* {
+	font-family: "Microsoft YaHei";
+	font-size: 14px;
+	height: 40px;
+}
+QListWidget {
+    font-size: 25px;
+    min-width: 60px;
+    max-width: 60px;
+}
+
+QListWidget::item {
+    min-height: 30px;
+}
+
+QListWidget::item:selected {
+    background-color: rgb(247, 165, 57);
+    color: #ffffff;
+}
+
+QStackedWidget {
+    min-width: 300px;
+}
+
+QStackedWidget::up-button,QStackedWidget::down-button {
+        width: 0;
+        height: 0;
+        border: none;
+        padding: 0;
+        margin: 0;
+}
+
+QLabel {
+    margin-left: 5px;
+}
+
+QLineEdit {
+    min-width: 150px;
+    border: 1px solid rgb(41, 57, 85);
+	border-radius: 5px;
+    padding: 1px 5px 1px 5px;
+}
+
+QSpinBox {
+	min-width: 130px;
+	max-width: 130px;
+    border: 1px solid rgb(41, 57, 85);
+	border-radius: 3px;
+    padding: 1px 5px 1px 5px;
+}
+
+QSpinBox::up-button, QSpinBox::down-button {
+    background: transparent;
+    width: 0;
+}
+
+QTextBrowser {
+	font-size: 12px;
+	min-width: 400px;
+}
+
+QPushButton.summon, QPushButton.treasure {
+    height: 80px;
+    width: 140px;
+    border: 3px solid rgb(70, 126, 231);
+    border-radius: 5px;
+}
+
+QPushButton.summon:pressed, QPushButton.treasure:pressed {
+    min-height: 80px;
+    width: 140px;
+    background-color: rgb(85, 137, 226);
+    color: #ffffff;
+}
+
+QPushButton.summon_cancel {
+    font-size: 25px;
+    height: 80px;
+    width: 140px;
+    background-color: rgba(231, 255, 96, 0.411);
+}
