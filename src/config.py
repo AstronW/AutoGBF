@@ -4,6 +4,7 @@ DEFAULT_CONFIG = {
         "hp_lower": 0,
         "joined_upper": 30,
         "joined_lower": 0,
+        "goal_turn": 0,
         "repeat_times": 0,
         "method": 0,
         "summon_id": '2040056000_04',

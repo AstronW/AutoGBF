@@ -225,6 +225,9 @@ class MainUI(QMainWindow):
         self.multi_joined_lower_label = QLabel("参加人数下限")
         self.multi_joined_lower_spinbox = QSpinBox()
         self.multi_joined_lower_spinbox.setMaximum(30)
+        self.multi_goal_label = QLabel("目标回合")
+        self.multi_goal_spinbox = QSpinBox()
+        self.multi_goal_spinbox.setMaximum(999999)
         self.multi_repeat_label = QLabel("重复次数")
         self.multi_repeat_spinbox = QSpinBox()
         self.multi_repeat_spinbox.setMaximum(999999)
@@ -244,6 +247,7 @@ class MainUI(QMainWindow):
         layout.addRow(self.multi_hp_lower_label, self.multi_hp_lower_spinbox)
         layout.addRow(self.multi_joined_upper_label, self.multi_joined_upper_spinbox)
         layout.addRow(self.multi_joined_lower_label, self.multi_joined_lower_spinbox)
+        layout.addRow(self.multi_goal_label, self.multi_goal_spinbox)
         layout.addRow(self.multi_repeat_label, self.multi_repeat_spinbox)
         layout.addRow(self.multi_treasure_label, self.multi_treasure_layout)
         layout.addRow(self.multi_treasure_count_label, self.multi_treasure_count_spinbox)
@@ -474,6 +478,7 @@ class MainUI(QMainWindow):
         self.data["multi"]["hp_lower"] = self.multi_hp_lower_spinbox.value()
         self.data["multi"]["joined_upper"] = self.multi_joined_upper_spinbox.value()
         self.data["multi"]["joined_lower"] = self.multi_joined_lower_spinbox.value()
+        self.data["multi"]["goal_turn"] = self.multi_goal_spinbox.value()
         self.data["multi"]["repeat_times"] = self.multi_repeat_spinbox.value()
         self.data["multi"]["treasure_id"] = self.multi_treasure_id
         self.data["multi"]["treasure_count"] = self.multi_treasure_count_spinbox.value()
@@ -527,6 +532,7 @@ class MainUI(QMainWindow):
         self.multi_hp_lower = self.data["multi"]["hp_lower"]
         self.multi_joined_upper = self.data["multi"]["joined_upper"]
         self.multi_joined_lower = self.data["multi"]["joined_lower"]
+        self.multi_goal = self.data["multi"]["goal_turn"]
         self.multi_repeat_times = self.data["multi"]["repeat_times"]
         self.multi_treasure_id = self.data["multi"]["treasure_id"]
         self.multi_treasure_count = self.data["multi"]["treasure_count"]
@@ -554,6 +560,7 @@ class MainUI(QMainWindow):
         self.multi_hp_lower_spinbox.setValue(self.multi_hp_lower)
         self.multi_joined_upper_spinbox.setValue(self.multi_joined_upper)
         self.multi_joined_lower_spinbox.setValue(self.multi_joined_lower)
+        self.multi_goal_spinbox.setValue(self.multi_goal)
         self.multi_repeat_spinbox.setValue(self.multi_repeat_times)
         self.multi_treasure_push_button.setIcon(QIcon(PATH_TREASURE % self.multi_treasure_id))
         self.multi_treasure_count_spinbox.setValue(self.multi_treasure_count)

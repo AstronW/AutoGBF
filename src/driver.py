@@ -111,7 +111,7 @@ class Driver:
                 if (
                     self.get_attribute(list_id_summon[i], "data-image") == summon_id
                 ):
-                    logger.info("已找到指定的召唤石")
+                    logger.info(f"已找到指定的召唤石:{summon_id}")
                     logger.debug(f"召唤石位置: {i}")
                     if i > offset:
                         self.driver.execute_script(SCROLL_INTO_VIEW, list_summon[i - offset])  # noqa F405

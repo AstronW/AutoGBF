@@ -37,10 +37,11 @@ class Battle(Driver):
             self.driver.refresh()
             time.sleep(1)
 
-    def full_auto_multi(self):
-        # count_turn = 0
+    def full_auto_multi(self, goal_turn=0):
+        count_turn = 0
         while ("#raid_multi" in self.driver.current_url
                or "#raid" in self.driver.current_url):
+            logger.info(f"开始第{count_turn+1}回合")
             logger.info("等待怪物血条出现")
             try:
                 self.wait_element_display(ENEMY_HP)  # noqa F405
@@ -69,9 +70,9 @@ class Battle(Driver):
                     | (self.zero_hp())
                     | self.battle_end()
                 ):
-                    # count_turn += 1
-                    # if count_turn >= goal_turn:
-                    #     return
+                    count_turn += 1
+                    if goal_turn != 0 and count_turn >= goal_turn:
+                        return True
                     break
                 time.sleep(1)
                 time_2 = time.time()
@@ -80,6 +81,7 @@ class Battle(Driver):
             time.sleep(1)
             self.driver.refresh()
             time.sleep(2)
+        return False
 
     def start_attack(self):
         try:
