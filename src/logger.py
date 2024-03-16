@@ -16,7 +16,7 @@ logging.raiseExceptions = True  # Set True if wanna see encode errors on console
 
 
 # Logger init
-logger_debug = False
+logger_debug = True
 
 logger = logging.getLogger('autogbf')
 logger.setLevel(logging.DEBUG if logger_debug else logging.INFO)
