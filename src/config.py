@@ -34,12 +34,10 @@ DEFAULT_CONFIG = {
         "treasure_id": "",
     },
     "pg": {
-        "enable_repeat": False,
-        "enable_treasure": False,
         "repeat_times": 0,
         "summon_id": '2040056000_04',
         "treasure_count": 0,
-        "treasure_id": "10436",
+        "treasure_id": "",
         "url": '',
     },
     "token": {
