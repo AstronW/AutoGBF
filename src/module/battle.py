@@ -6,8 +6,9 @@ from logger import logger
 
 class Battle(Driver):
 
-    def full_auto(self):
-        while (("#raid_multi" or "#raid") in self.driver.current_url):
+    def full_auto(self, is_refresh=True):
+        while ("#raid_multi" in self.driver.current_url
+               or "#raid" in self.driver.current_url):
             logger.info("等待怪物血条出现")
             try:
                 self.wait_element_display(ENEMY_HP)  # noqa F405
@@ -31,14 +32,19 @@ class Battle(Driver):
                 self.wait_element_display(MAIN_MASK, 80) # noqa F405
             except Exception:
                 pass
-            self.driver.back()
-            time.sleep(0.5)
-            self.driver.refresh()
-            time.sleep(1)
+            if is_refresh:
+                self.driver.refresh()
+                time.sleep(1)
+            else:
+                self.driver.back()
+                time.sleep(0.5)
+                self.driver.refresh()
+                time.sleep(1)
 
     def full_auto_multi(self, goal_turn=0):
         count_turn = 0
-        while (("#raid_multi" or "#raid") in self.driver.current_url):
+        while ("#raid_multi" in self.driver.current_url
+               or "#raid" in self.driver.current_url):
             logger.info(f"开始第{count_turn+1}回合")
             logger.info("等待怪物血条出现")
             try:
