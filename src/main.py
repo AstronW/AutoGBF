@@ -12,7 +12,6 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QPushButton,
     QRadioButton,
-    QSlider,
     QSpacerItem,
     QSizePolicy,
     QSpinBox,
