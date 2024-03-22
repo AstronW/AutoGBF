@@ -58,8 +58,8 @@ class Solo(Battle):
                 logger.info("开始战斗")
                 if method == 1:
                     self.full_auto()
-                else:
-                    pass
+                elif method == 2:
+                    self.full_auto(False)
                 logger.info("战斗结束")
                 count += 1
 
