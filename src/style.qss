@@ -31,7 +31,7 @@ QStackedWidget::up-button,QStackedWidget::down-button {
 }
 
 QLabel {
-    margin-left: 5px;
+    margin-left: 2px;
 }
 
 QLineEdit {
@@ -49,7 +49,20 @@ QSpinBox {
     padding: 1px 5px 1px 5px;
 }
 
+QSpinBox.cap {
+    min-width: 40px;
+	max-width: 40px;
+    border: 1px solid rgb(41, 57, 85);
+	border-radius: 3px;
+    padding: 1px 5px 1px 5px;
+}
+
 QSpinBox::up-button, QSpinBox::down-button {
+    background: transparent;
+    width: 0;
+}
+
+QSpinBox.cap::up-button, QSpinBox.cap::down-button {
     background: transparent;
     width: 0;
 }
