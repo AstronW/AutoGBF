@@ -7,8 +7,7 @@ from logger import logger
 class Battle(Driver):
 
     def full_auto(self):
-        while ("#raid_multi" in self.driver.current_url
-               or "#raid" in self.driver.current_url):
+        while (("#raid_multi" or "#raid") in self.driver.current_url):
             logger.info("等待怪物血条出现")
             try:
                 self.wait_element_display(ENEMY_HP)  # noqa F405
@@ -39,8 +38,7 @@ class Battle(Driver):
 
     def full_auto_multi(self, goal_turn=0):
         count_turn = 0
-        while ("#raid_multi" in self.driver.current_url
-               or "#raid" in self.driver.current_url):
+        while (("#raid_multi" or "#raid") in self.driver.current_url):
             logger.info(f"开始第{count_turn+1}回合")
             logger.info("等待怪物血条出现")
             try:
@@ -49,6 +47,14 @@ class Battle(Driver):
                 self.driver.refresh()
                 time.sleep(2)
                 continue
+            if (
+                (self.find_pop())
+                | (self.zero_hp())
+                | self.battle_end()
+            ):
+                return True
+            else:
+                pass
             try:
                 if self.element_is_displayed(BTN_AUTO):  # noqa F405
                     logger.info("点击FA按钮")
