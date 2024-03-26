@@ -31,7 +31,13 @@ class Driver:
         """初始化浏览器"""
         basepath = os.path.dirname(os.path.abspath(__file__))
         basepath = "\\".join(basepath.split("\\")[:-1])
+        caps = {
+            "browserName": "chrome",
+            'goog:loggingPrefs': {'performance': 'ALL'}  # 开启日志性能监听
+        }
         option = Options()
+        for key, value in caps.items():
+            option.set_capability(key, value)
         option.add_experimental_option("detach", True)
         option.add_experimental_option(
             "excludeSwitches", ["enable-automation", "enable-logging"]
