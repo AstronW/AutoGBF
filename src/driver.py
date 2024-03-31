@@ -127,7 +127,10 @@ class Driver:
                         list_summon[i].click()
                     time.sleep(0.5)
                     if self.find_pop():
-                        self.send_code()
+                        try:
+                            self.send_code()
+                        except Exception:
+                            return False
                         time.sleep(1)
                         list_summon[i].click()
                     else:
@@ -145,7 +148,10 @@ class Driver:
         list_summon[0].click()
         time.sleep(0.5)
         if self.find_pop():
-            self.send_code()
+            try:
+                self.send_code()
+            except Exception:
+                return False
             time.sleep(1)
             list_summon[0].click()
         else:
