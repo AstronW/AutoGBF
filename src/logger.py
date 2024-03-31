@@ -40,7 +40,7 @@ os.chdir(os.path.join(os.path.dirname(__file__), '../'))
 pyw_name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 
 
-log_file = './logs/autogbf.txt'
+log_file = './logs/autogbf'
 file_hdlr = logging.handlers.TimedRotatingFileHandler(filename=log_file, when='MIDNIGHT', interval=1,
                                                       backupCount=7, encoding='utf-8')
 file_hdlr.setLevel(logging.DEBUG)
