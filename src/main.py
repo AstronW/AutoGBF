@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
     QSpinBox,
     QStackedWidget,
     QTextBrowser,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -32,7 +33,7 @@ import asyncio
 # from logger import logger
 
 
-LIST_METHOD = ["单人", "多人", "沙盒", "星本", "战货", "连战",]
+LIST_METHOD = ["单人", "多人", "沙盒", "星本", "战货",]
 LIST_ZONE = ["沙盒1.0-火光", "沙盒1.0-水暗", "沙盒1.0-土暗", "沙盒1.0-风光", "沙盒2.0-火光", "沙盒2.0-水暗", "沙盒2.0-土暗", "沙盒2.0-风光", "沙盒3.0"]  # noqa E501
 LIST_SUMMON = ["2040034000_02", "2040028000_02", "2040027000_02", "2040020000_02", "2040047000_02", "2040046000_02", "2040094000_02", "2040100000_02", "2040084000_02", "2040098000_02", "2040080000_02", "2040090000_02", "2040056000_04", "2040003000_04", "2040157000", "2040158000", "2040114000",]  # noqa E501
 PATH_SUMMON = r"./assets/summon/%s.jpg"
@@ -83,12 +84,15 @@ class MainUI(QMainWindow):
         self.multi_summon_push_button.clicked.connect(self.check_summon)
         self.halo_summon_push_button.clicked.connect(self.check_summon)
         self.token_summon_push_button.clicked.connect(self.check_summon)
-        self.pg_summon_push_button.clicked.connect(self.check_summon)
+        # self.pg_summon_push_button.clicked.connect(self.check_summon)
 
         self.solo_treasure_push_button.clicked.connect(self.check_treasure)
         self.multi_treasure_push_button.clicked.connect(self.check_treasure)
         self.sandbox_treasure_push_button.clicked.connect(self.check_treasure)
-        self.pg_treasure_push_button.clicked.connect(self.check_treasure)
+        # self.pg_treasure_push_button.clicked.connect(self.check_treasure)
+
+        self.token_draw_toolbutton.clicked.connect(self.draw)
+        self.token_pick_toolbutton.clicked.connect(self.pick)
 
     def init_ui(self):
         """初始化界面"""
@@ -114,21 +118,21 @@ class MainUI(QMainWindow):
         self.page3 = QWidget()
         self.page4 = QWidget()
         self.page5 = QWidget()
-        self.page6 = QWidget()
+        # self.page6 = QWidget()
 
         self.add_page_content_1(self.page1)
         self.add_page_content_2(self.page2)
         self.add_page_content_3(self.page3)
         self.add_page_content_4(self.page4)
         self.add_page_content_5(self.page5)
-        self.add_page_content_6(self.page6)
+        # self.add_page_content_6(self.page6)
 
         self.stacked_widget.addWidget(self.page1)
         self.stacked_widget.addWidget(self.page2)
         self.stacked_widget.addWidget(self.page3)
         self.stacked_widget.addWidget(self.page4)
         self.stacked_widget.addWidget(self.page5)
-        self.stacked_widget.addWidget(self.page6)
+        # self.stacked_widget.addWidget(self.page6)
 
         self.button_box = QHBoxLayout()
         self.button_start = QPushButton("开始")
@@ -339,66 +343,48 @@ class MainUI(QMainWindow):
         self.token_summon_push_button.setIconSize(QSize(140, 80))
         self.token_summon_layout.addWidget(self.token_summon_push_button)
         self.token_summon_layout.addSpacerItem(self.hori_spacer)
-        self.token_method_label = QLabel("选择战斗模式")
-        self.token_method_layout = QHBoxLayout()
-        self.token_method_button_group = QButtonGroup()
-        self.token_method_radio_button_1 = QRadioButton("单面")
-        self.token_method_radio_button_2 = QRadioButton("多面")
-        self.token_method_radio_button_3 = QRadioButton("古战场")
-        self.token_method_button_group.addButton(self.token_method_radio_button_1, 1)
-        self.token_method_button_group.addButton(self.token_method_radio_button_2, 2)
-        self.token_method_button_group.addButton(self.token_method_radio_button_3, 3)
-        self.token_method_layout.addWidget(self.token_method_radio_button_1)
-        self.token_method_layout.addWidget(self.token_method_radio_button_2)
-        self.token_method_layout.addWidget(self.token_method_radio_button_3)
-        self.token_method_layout.addSpacerItem(self.hori_spacer)
-        self.token_repeat_label = QLabel("重复次数")
-        self.token_repeat_spinbox = QSpinBox()
-        self.token_repeat_spinbox.setMaximum(999999)
-        self.token_treasure_label = QLabel("素材ID")
-        self.token_treasure_spinbox = QSpinBox()
-        self.token_treasure_spinbox.setMaximum(999999)
-        self.token_treasure_count_label = QLabel("素材数量")
-        self.token_treasure_count_spinbox = QSpinBox()
-        self.token_treasure_count_spinbox.setMaximum(999999)
+        self.token_draw_toolbutton = QToolButton()
+        self.token_draw_toolbutton.setText("一键抽战货")
+        self.token_draw_toolbutton.setIconSize(QSize(140, 80))
+        self.token_pick_toolbutton = QToolButton()
+        self.token_pick_toolbutton.setText("一键领取邮箱奖励")
+        self.token_pick_toolbutton.setIconSize(QSize(140, 80))
         layout.addRow(self.token_url_label, self.token_url_line_edit)
         layout.addRow(self.token_summon_label, self.token_summon_layout)
-        layout.addRow(self.token_method_label, self.token_method_layout)
-        layout.addRow(self.token_repeat_label, self.token_repeat_spinbox)
-        layout.addRow(self.token_treasure_label, self.token_treasure_spinbox)
-        layout.addRow(self.token_treasure_count_label, self.token_treasure_count_spinbox)
+        layout.addRow(None, self.token_draw_toolbutton)
+        layout.addRow(None, self.token_pick_toolbutton)
         page.setLayout(layout)
 
-    def add_page_content_6(self, page):
-        layout = QFormLayout()
-        self.pg_url_label = QLabel("副本网址")
-        self.pg_url_line_edit = QLineEdit()
-        self.pg_summon_label = QLabel("选择召唤石")
-        self.pg_summon_layout = QHBoxLayout()
-        self.pg_summon_push_button = QPushButton()
-        self.pg_summon_push_button.setProperty("class", "summon")
-        self.pg_summon_push_button.setIconSize(QSize(140, 80))
-        self.pg_summon_layout.addWidget(self.pg_summon_push_button)
-        self.pg_summon_layout.addSpacerItem(self.hori_spacer)
-        self.pg_repeat_label = QLabel("重复次数")
-        self.pg_repeat_spinbox = QSpinBox()
-        self.pg_repeat_spinbox.setMaximum(999999)
-        self.pg_treasure_label = QLabel("选择素材")
-        self.pg_treasure_layout = QHBoxLayout()
-        self.pg_treasure_push_button = QPushButton()
-        self.pg_treasure_push_button.setProperty("class", "treasure")
-        self.pg_treasure_push_button.setIconSize(QSize(140, 80))
-        self.pg_treasure_layout.addWidget(self.pg_treasure_push_button)
-        self.pg_treasure_layout.addSpacerItem(self.hori_spacer)
-        self.pg_treasure_count_label = QLabel("素材数量")
-        self.pg_treasure_count_spinbox = QSpinBox()
-        self.pg_treasure_count_spinbox.setMaximum(999999)
-        layout.addRow(self.pg_url_label, self.pg_url_line_edit)
-        layout.addRow(self.pg_summon_label, self.pg_summon_layout)
-        layout.addRow(self.pg_repeat_label, self.pg_repeat_spinbox)
-        layout.addRow(self.pg_treasure_label, self.pg_treasure_layout)
-        layout.addRow(self.pg_treasure_count_label, self.pg_treasure_count_spinbox)
-        page.setLayout(layout)
+    # def add_page_content_6(self, page):
+    #     layout = QFormLayout()
+    #     self.pg_url_label = QLabel("副本网址")
+    #     self.pg_url_line_edit = QLineEdit()
+    #     self.pg_summon_label = QLabel("选择召唤石")
+    #     self.pg_summon_layout = QHBoxLayout()
+    #     self.pg_summon_push_button = QPushButton()
+    #     self.pg_summon_push_button.setProperty("class", "summon")
+    #     self.pg_summon_push_button.setIconSize(QSize(140, 80))
+    #     self.pg_summon_layout.addWidget(self.pg_summon_push_button)
+    #     self.pg_summon_layout.addSpacerItem(self.hori_spacer)
+    #     self.pg_repeat_label = QLabel("重复次数")
+    #     self.pg_repeat_spinbox = QSpinBox()
+    #     self.pg_repeat_spinbox.setMaximum(999999)
+    #     self.pg_treasure_label = QLabel("选择素材")
+    #     self.pg_treasure_layout = QHBoxLayout()
+    #     self.pg_treasure_push_button = QPushButton()
+    #     self.pg_treasure_push_button.setProperty("class", "treasure")
+    #     self.pg_treasure_push_button.setIconSize(QSize(140, 80))
+    #     self.pg_treasure_layout.addWidget(self.pg_treasure_push_button)
+    #     self.pg_treasure_layout.addSpacerItem(self.hori_spacer)
+    #     self.pg_treasure_count_label = QLabel("素材数量")
+    #     self.pg_treasure_count_spinbox = QSpinBox()
+    #     self.pg_treasure_count_spinbox.setMaximum(999999)
+    #     layout.addRow(self.pg_url_label, self.pg_url_line_edit)
+    #     layout.addRow(self.pg_summon_label, self.pg_summon_layout)
+    #     layout.addRow(self.pg_repeat_label, self.pg_repeat_spinbox)
+    #     layout.addRow(self.pg_treasure_label, self.pg_treasure_layout)
+    #     layout.addRow(self.pg_treasure_count_label, self.pg_treasure_count_spinbox)
+    #     page.setLayout(layout)
 
     def output_written(self, str):
         cursor = self.text_browser.textCursor()
@@ -460,8 +446,8 @@ class MainUI(QMainWindow):
             self.halo_summon_id = id
         elif self.sender_button == self.token_summon_push_button:
             self.token_summon_id = id
-        elif self.sender_button == self.pg_summon_push_button:
-            self.pg_summon_id = id
+        # elif self.sender_button == self.pg_summon_push_button:
+        #     self.pg_summon_id = id
 
     def update_treasure(self, id):
         treasure_id = self.list_treasure_id[id]
@@ -476,8 +462,8 @@ class MainUI(QMainWindow):
             self.halo_treasure_id = treasure_id
         # elif self.sender_button == self.token_treasure_push_button:
         #     self.token_treasure_id = treasure_id
-        elif self.sender_button == self.pg_treasure_push_button:
-            self.pg_treasure_id = treasure_id
+        # elif self.sender_button == self.pg_treasure_push_button:
+        #     self.pg_treasure_id = treasure_id
 
     def update_data(self):
         self.data["solo"]["url"] = self.solo_url_line_edit.text()
@@ -506,13 +492,13 @@ class MainUI(QMainWindow):
         self.data["halo"]["repeat_times"] = self.halo_repeat_spinbox.value()
         self.data["halo"]["treasure_id"] = self.halo_treasure_id
         self.data["halo"]["treasure_count"] = self.halo_treasure_count_spinbox.value()
-        self.data["pg"]["url"] = self.pg_url_line_edit.text()
-        self.data["pg"]["summon_id"] = self.pg_summon_id
-        self.data["pg"]["repeat_times"] = self.pg_repeat_spinbox.value()
-        self.data["pg"]["treasure_id"] = self.pg_treasure_id
-        self.data["pg"]["treasure_count"] = self.pg_treasure_count_spinbox.value()
-        # self.data["token"]["url"] = self.token_url_line_edit.text()
-        # self.data["token"]["summon_id"] = self.token_summon_id
+        # self.data["pg"]["url"] = self.pg_url_line_edit.text()
+        # self.data["pg"]["summon_id"] = self.pg_summon_id
+        # self.data["pg"]["repeat_times"] = self.pg_repeat_spinbox.value()
+        # self.data["pg"]["treasure_id"] = self.pg_treasure_id
+        # self.data["pg"]["treasure_count"] = self.pg_treasure_count_spinbox.value()
+        self.data["token"]["url"] = self.token_url_line_edit.text()
+        self.data["token"]["summon_id"] = self.token_summon_id
         # self.data["token"]["method"] = self.token_method_button_group.checkedId()
         # self.data["token"]["repeat_times"] = self.token_repeat_spinbox.value()
         # self.data["token"]["treasure_id"] = self.token_treasure_id
@@ -559,11 +545,13 @@ class MainUI(QMainWindow):
         self.halo_repeat_times = self.data["halo"]["repeat_times"]
         self.halo_treasure_id = self.data["halo"]["treasure_id"]
         self.halo_treasure_count = self.data["halo"]["treasure_count"]
-        self.pg_url = self.data["pg"]["url"]
-        self.pg_summon_id = self.data["pg"]["summon_id"]
-        self.pg_repeat_times = self.data["pg"]["repeat_times"]
-        self.pg_treasure_id = self.data["pg"]["treasure_id"]
-        self.pg_treasure_count = self.data["pg"]["treasure_count"]
+        self.token_url = self.data["token"]["url"]
+        self.token_summon_id = self.data["token"]["summon_id"]
+        # self.pg_url = self.data["pg"]["url"]
+        # self.pg_summon_id = self.data["pg"]["summon_id"]
+        # self.pg_repeat_times = self.data["pg"]["repeat_times"]
+        # self.pg_treasure_id = self.data["pg"]["treasure_id"]
+        # self.pg_treasure_count = self.data["pg"]["treasure_count"]
 
     def update_ui(self):
         self.solo_url_line_edit.setText(self.solo_url)
@@ -592,11 +580,13 @@ class MainUI(QMainWindow):
         self.halo_repeat_spinbox.setValue(self.halo_repeat_times)
         self.halo_treasure_push_button.setIcon(QIcon(PATH_TREASURE % self.halo_treasure_id))
         self.halo_treasure_count_spinbox.setValue(self.halo_treasure_count)
-        self.pg_url_line_edit.setText(self.pg_url)
-        self.pg_summon_push_button.setIcon(QIcon(PATH_SUMMON % self.pg_summon_id))
-        self.pg_repeat_spinbox.setValue(self.pg_repeat_times)
-        self.pg_treasure_push_button.setIcon(QIcon(PATH_TREASURE % self.pg_treasure_id))
-        self.pg_treasure_count_spinbox.setValue(self.pg_treasure_count)
+        self.token_url_line_edit.setText(self.token_url)
+        self.token_summon_push_button.setIcon(QIcon(PATH_SUMMON % self.token_summon_id))
+        # self.pg_url_line_edit.setText(self.pg_url)
+        # self.pg_summon_push_button.setIcon(QIcon(PATH_SUMMON % self.pg_summon_id))
+        # self.pg_repeat_spinbox.setValue(self.pg_repeat_times)
+        # self.pg_treasure_push_button.setIcon(QIcon(PATH_TREASURE % self.pg_treasure_id))
+        # self.pg_treasure_count_spinbox.setValue(self.pg_treasure_count)
 
     def redirect_output(self):
         sys.stdout = EmittingStr()
@@ -614,6 +604,30 @@ class MainUI(QMainWindow):
         mission.finished.connect(lambda: mission.deleteLater())
         mission.finished.connect(lambda: self.button_start.setEnabled(True))
         mission.finished.connect(lambda: self.button_stop.setEnabled(False))
+        mission.start()
+
+    def draw(self):
+        self.update_data()
+        self.quit = False
+        mission = None
+        if not self.driver.chrome_is_exist():
+            self.open_chrome()
+        self.button_start.setEnabled(False)
+        mission = DrawQThread(self)
+        mission.finished.connect(lambda: mission.deleteLater())
+        mission.finished.connect(lambda: self.button_start.setEnabled(True))
+        mission.start()
+
+    def pick(self):
+        self.update_data()
+        self.quit = False
+        mission = None
+        if not self.driver.chrome_is_exist():
+            self.open_chrome()
+        self.button_start.setEnabled(False)
+        mission = PickQThread(self)
+        mission.finished.connect(lambda: mission.deleteLater())
+        mission.finished.connect(lambda: self.button_start.setEnabled(True))
         mission.start()
 
     def stop(self):
@@ -751,30 +765,52 @@ class MissionQThread(QThread):
         super().__init__()
         self.parent = parent
         self.module = self.parent.method_list_widget.currentRow()
-        self.driver = self.parent.driver.driver
 
     def run(self):
         if self.module == 0:
             from module.solo import Solo
-            soloraid = Solo(self.parent)
-            soloraid.start_mission()
+            raid = Solo(self.parent)
+            raid.start_mission()
         elif self.module == 1:
             from module.multi import Multi
-            multiraid = Multi(self.parent)
-            multiraid.start_mission()
+            raid = Multi(self.parent)
+            raid.start_mission()
         elif self.module == 2:
             from module.sandbox import Sandbox
-            multiraid = Sandbox(self.parent)
-            multiraid.start_mission()
+            raid = Sandbox(self.parent)
+            raid.start_mission()
         elif self.module == 3:
             from module.halo import Halo
-            multiraid = Halo(self.parent)
-            multiraid.start_mission()
-        elif self.module == 5:
-            from module.proving import Proving
-            multiraid = Proving(self.parent)
-            multiraid.start_mission()
+            raid = Halo(self.parent)
+            raid.start_mission()
+        elif self.module == 4:
+            from module.token import Token
+            raid = Token(self.parent)
+            raid.start_mission()
         return
+
+
+class DrawQThread(QThread):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.parent = parent
+
+    def run(self):
+        from module.token import Token
+        raid = Token(self.parent)
+        raid.draw()
+
+
+class PickQThread(QThread):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.parent = parent
+        self.driver = self.parent.driver.driver
+
+    def run(self):
+        from module.token import Token
+        raid = Token(self.parent)
+        raid.pick()
 
 
 def start():

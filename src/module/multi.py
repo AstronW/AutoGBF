@@ -56,7 +56,7 @@ class Multi(Battle):
                 for i in range(len(list_raids)):
                     hp_left = int(re.split("[ %]", self.get_attribute(list_raids[i], HP_LEFT, "style"))[1])
                     player_count = int(self.find_element(list_raids[i], PLAYER_COUNT).text.split("/")[0])
-                    if hp_lower < hp_left < hp_upper and joined_lower < player_count < joined_upper:
+                    if hp_lower <= hp_left <= hp_upper and joined_lower <= player_count <= joined_upper:
                         raid_index = i
                         if 'decreased' in self.get_attribute(list_raids[i], FP, 'class'):
                             if (i > offset):
