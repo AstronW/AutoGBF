@@ -91,15 +91,14 @@ class Battle(Driver):
                 continue
             time_1 = time.time()
             logger.info("等待回合结束")
-            time.sleep(1)
             while True:
                 self.performance_log = self.driver.get_log('performance')
                 if (
-                    self.check_ability()
-                    | self.start_attack()
+                    self.start_attack()
                     | self.find_pop()
                     | self.zero_hp()
                     | self.battle_end()
+                    | self.check_ability()
                 ):
                     self.count_turn += 1
                     if goal_turn != 0 and self.count_turn >= goal_turn:
@@ -134,24 +133,33 @@ class Battle(Driver):
 
     def battle_end(self):
         try:
-            return self.element_is_displayed(BTN_NEXT)  # noqa F405
+            if self.element_is_displayed(BTN_NEXT):  # noqa F405
+                return True
+            else:
+                return False
         except Exception:
             return True
 
     def check_ability(self):
-        for packet in self.performance_log:
-            message = json.loads(packet.get('message')).get('message')
-            if message.get('method') != 'Network.responseReceived':
-                continue
-            requestid = message.get('params').get('requestId')
-            url = message.get('params').get('response').get('url')
-            if re.match(PATTERN_ABILITY, url):
-                resp = self.driver.execute_cdp_cmd('Network.getResponseBody', {'requestId': requestid})
-                ability_name = json.loads(resp.get("body")).get("scenario")[0].get("name")
-                if ability_name in ABILITY_LIST:
-                    self.count_turn -= 1
-                    return True
-        return False
+        try:
+            for packet in self.performance_log:
+                message = json.loads(packet.get('message')).get('message')
+                if message.get('method') != 'Network.responseReceived':
+                    continue
+                requestid = message.get('params').get('requestId')
+                url = message.get('params').get('response').get('url')
+                if re.match(PATTERN_ABILITY, url):
+                    resp = self.driver.execute_cdp_cmd('Network.getResponseBody', {'requestId': requestid})
+                    ability_name = json.loads(resp.get("body")).get("scenario")[0].get("name")
+                    if ability_name in ABILITY_LIST:
+                        self.count_turn -= 1
+                        logger.info(7)
+                        return True
+            return False
+        except Exception:
+            # logger.error(e)
+            # logger.info(8)
+            return False
 
     def check_summon(self, summon_refresh):
         if summon_refresh:
