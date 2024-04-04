@@ -6,7 +6,7 @@ DEFAULT_CONFIG = {
         "joined_lower": 0,
         "goal_turn": 0,
         "repeat_times": 0,
-        "method": 0,
+        "method": 1,
         "summon_id": '2040056000_04',
         "treasure_count": 0,
         "treasure_id": "",
@@ -24,7 +24,7 @@ DEFAULT_CONFIG = {
         "summon_id": '2040056000_04',
         "treasure_count": 0,
         "treasure_id": "",
-        "method": 0,
+        "method": 1,
         "url": '',
     },
     "halo": {
@@ -42,6 +42,7 @@ DEFAULT_CONFIG = {
     },
     "token": {
         "url": '',
-        "summon_id": '2040056000_04'
+        "summon_id": '2040056000_04',
+        "method": 1,
     }
 }

@@ -89,6 +89,7 @@ class MainUI(QMainWindow):
         self.solo_treasure_push_button.clicked.connect(self.check_treasure)
         self.multi_treasure_push_button.clicked.connect(self.check_treasure)
         self.sandbox_treasure_push_button.clicked.connect(self.check_treasure)
+        self.halo_treasure_push_button.clicked.connect(self.check_treasure)
         # self.pg_treasure_push_button.clicked.connect(self.check_treasure)
 
         self.token_draw_toolbutton.clicked.connect(self.draw)
@@ -334,7 +335,7 @@ class MainUI(QMainWindow):
 
     def add_page_content_5(self, page):
         layout = QFormLayout()
-        self.token_url_label = QLabel("副本网址")
+        self.token_url_label = QLabel("活动网址")
         self.token_url_line_edit = QLineEdit()
         self.token_summon_label = QLabel("选择召唤石")
         self.token_summon_layout = QHBoxLayout()
@@ -343,6 +344,16 @@ class MainUI(QMainWindow):
         self.token_summon_push_button.setIconSize(QSize(140, 80))
         self.token_summon_layout.addWidget(self.token_summon_push_button)
         self.token_summon_layout.addSpacerItem(self.hori_spacer)
+        self.token_method_label = QLabel("副本选择")
+        self.token_method_layout = QHBoxLayout()
+        self.token_method_button_group = QButtonGroup()
+        self.token_method_radio_button_1 = QRadioButton("3肉")
+        self.token_method_radio_button_2 = QRadioButton("5肉")
+        self.token_method_button_group.addButton(self.token_method_radio_button_1, 1)
+        self.token_method_button_group.addButton(self.token_method_radio_button_2, 2)
+        self.token_method_layout.addWidget(self.token_method_radio_button_1)
+        self.token_method_layout.addWidget(self.token_method_radio_button_2)
+        self.token_method_layout.addSpacerItem(self.hori_spacer)
         self.token_draw_toolbutton = QToolButton()
         self.token_draw_toolbutton.setText("一键抽战货")
         self.token_draw_toolbutton.setIconSize(QSize(140, 80))
@@ -351,6 +362,7 @@ class MainUI(QMainWindow):
         self.token_pick_toolbutton.setIconSize(QSize(140, 80))
         layout.addRow(self.token_url_label, self.token_url_line_edit)
         layout.addRow(self.token_summon_label, self.token_summon_layout)
+        layout.addRow(self.token_method_label, self.token_method_layout)
         layout.addRow(None, self.token_draw_toolbutton)
         layout.addRow(None, self.token_pick_toolbutton)
         page.setLayout(layout)
@@ -499,6 +511,7 @@ class MainUI(QMainWindow):
         # self.data["pg"]["treasure_count"] = self.pg_treasure_count_spinbox.value()
         self.data["token"]["url"] = self.token_url_line_edit.text()
         self.data["token"]["summon_id"] = self.token_summon_id
+        self.data["token"]["method"] = self.token_method_button_group.checkedId()
         # self.data["token"]["method"] = self.token_method_button_group.checkedId()
         # self.data["token"]["repeat_times"] = self.token_repeat_spinbox.value()
         # self.data["token"]["treasure_id"] = self.token_treasure_id
@@ -547,6 +560,7 @@ class MainUI(QMainWindow):
         self.halo_treasure_count = self.data["halo"]["treasure_count"]
         self.token_url = self.data["token"]["url"]
         self.token_summon_id = self.data["token"]["summon_id"]
+        self.token_method = self.data["token"]["method"]
         # self.pg_url = self.data["pg"]["url"]
         # self.pg_summon_id = self.data["pg"]["summon_id"]
         # self.pg_repeat_times = self.data["pg"]["repeat_times"]
@@ -582,6 +596,7 @@ class MainUI(QMainWindow):
         self.halo_treasure_count_spinbox.setValue(self.halo_treasure_count)
         self.token_url_line_edit.setText(self.token_url)
         self.token_summon_push_button.setIcon(QIcon(PATH_SUMMON % self.token_summon_id))
+        self.token_method_radio_button_1.setChecked(True)
         # self.pg_url_line_edit.setText(self.pg_url)
         # self.pg_summon_push_button.setIcon(QIcon(PATH_SUMMON % self.pg_summon_id))
         # self.pg_repeat_spinbox.setValue(self.pg_repeat_times)

@@ -1,12 +1,11 @@
 from module.battle import Battle
-from selector.battle import *  # noqa E501
-from selector.base import *  # noqa E501
 import time
 import yaml
 from logger import logger
 import traceback
 
 
+BTN_OK = "#pop > div > div.prt-popup-footer > div.btn-usual-ok"
 URL_HOME = "https://game.granbluefantasy.jp/#mypage"
 URL_TREASURE = "https://game.granbluefantasy.jp/#quest/extra"
 URL_VH = "https://game.granbluefantasy.jp/#quest/supporter/510031/5"
@@ -54,11 +53,11 @@ class Halo(Battle):
                 self.find_summon(KAGUYA_ID)
                 time.sleep(0.5)
                 if "stage" in self.driver.current_url:
-                    self.click_element(BTN_OK)  # noqa F405
+                    self.click_element(BTN_OK)
                 logger.info("正在等待进入战斗界面")
                 self.wait_url(["#raid", "#raid_multi"])
                 logger.info("开始战斗")
-                self.full_auto()
+                self.full_auto(is_refresh=False)
                 logger.info("战斗结束")
                 count += 1
 

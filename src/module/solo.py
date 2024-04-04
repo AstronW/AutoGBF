@@ -1,6 +1,4 @@
 from module.battle import Battle
-from selector.battle import *  # noqa E501
-from selector.base import *  # noqa E501
 import time
 import yaml
 from logger import logger
@@ -8,6 +6,7 @@ import traceback
 
 
 URL_HOME = "https://game.granbluefantasy.jp/#mypage"
+BTN_OK = "#pop > div > div.prt-popup-footer > div.btn-usual-ok"
 
 
 class Solo(Battle):

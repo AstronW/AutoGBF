@@ -40,6 +40,7 @@ class Token(Battle):
                 self.data = yaml.load(f, Loader=yaml.FullLoader)
             url = self.data["token"]["url"]
             summon_id = self.data["token"]["summon_id"]
+            method = self.data["token"]["method"]
             logger.info("=" * 28)
             logger.attr("url", url)
             logger.attr("summon_id", summon_id)
@@ -56,7 +57,12 @@ class Token(Battle):
             url_vh = self.driver.current_url
             # 获取3肉副本网址
             url_list = url_vh.split('/')
-            url_list[-2] = str((int(url_list[-2]) + 10))
+            if method == 1:
+                url_list[-2] = str((int(url_list[-2]) + 10))
+                raid_cost = 3
+            elif method == 2:
+                url_list[-2] = str((int(url_list[-2]) + 20))
+                raid_cost = 5
             url_ex = '/'.join(url_list) + '/0/10525'
             logger.attr("url_vh", url_vh)
             logger.attr("url_ex", url_ex)
@@ -77,7 +83,7 @@ class Token(Battle):
                 logger.info('-' * 50)
                 logger.info(f'当前拥有{meat_count}个肉')
 
-                for _ in range(meat_count // 3):
+                for _ in range(meat_count // raid_cost):
                     logger.info('-' * 50)
                     logger.info(f"开始第{count + 1}次任务")
                     time.sleep(1)

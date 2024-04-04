@@ -1,15 +1,19 @@
 # -*- coding: UTF-8 -*-
 from driver import Driver
-from selector.battle import *  # noqa E501
 import time
 from logger import logger
 import json
 import re
 
-'https://game.granbluefantasy.jp/rest/multiraid/ability_result.json?_=1711442236756&t=1711442236757&uid=36427197'
+
 PATTERN_ABILITY = r'https://game\.granbluefantasy\.jp/rest/(multiraid|raid)/ability_result\.json\?.*'
 PATTERN_SUMMON = r'https://game\.granbluefantasy\.jp/rest/(multiraid|raid)/summon_result\.json\?.*'
 ABILITY_LIST = ['Koenig Dekret', 'ケーニヒ・ベシュテレン', 'ツープラトン', 'Tag Team']
+ENEMY_HP = "#wrapper > div.contents > div.cnt-raid > div.cnt-raid-stage > div.prt-targeting-area > div.prt-gauge-area > div.alive > span"  # noqa E501
+BTN_AUTO = "#wrapper > div.contents > div.cnt-raid > div.btn-auto"
+BTN_ATT = "#cnt-raid-information > div.btn-attack-start"
+BTN_NEXT = '#wrapper > div.contents > div.cnt-raid > div.prt-command-end'
+MAIN_MASK = "#main-mask"
 
 
 class Battle(Driver):
@@ -18,19 +22,19 @@ class Battle(Driver):
         while ("#raid" in self.driver.current_url):
             logger.info("等待怪物血条出现")
             try:
-                self.wait_element_display(ENEMY_HP)  # noqa F405
+                self.wait_element_display(ENEMY_HP)
             except Exception:
                 self.driver.refresh()
                 continue
             for i in range(50):
                 try:
-                    if self.element_is_displayed(BTN_AUTO):  # noqa F405
+                    if self.element_is_displayed(BTN_AUTO):
                         logger.info("点击FA按钮")
-                        self.click_element(BTN_AUTO)  # noqa F405
+                        self.click_element(BTN_AUTO)
                         break
                     else:
                         logger.info("点击攻击按钮")
-                        self.click_element(BTN_ATT)  # noqa F405
+                        self.click_element(BTN_ATT)
                     break
                 except Exception:
                     time.sleep(0.2)
@@ -65,7 +69,7 @@ class Battle(Driver):
             logger.info(f"开始第{self.count_turn+1}回合")
             logger.info("等待怪物血条出现")
             try:
-                self.wait_element_display(ENEMY_HP)  # noqa F405
+                self.wait_element_display(ENEMY_HP)
             except Exception:
                 self.driver.refresh()
                 time.sleep(2)
@@ -79,12 +83,12 @@ class Battle(Driver):
             else:
                 pass
             try:
-                if self.element_is_displayed(BTN_AUTO):  # noqa F405
+                if self.element_is_displayed(BTN_AUTO):
                     logger.info("点击FA按钮")
-                    self.click_element(BTN_AUTO)  # noqa F405
+                    self.click_element(BTN_AUTO)
                 else:
                     logger.info("点击攻击按钮")
-                    self.click_element(BTN_ATT)  # noqa F405
+                    self.click_element(BTN_ATT)
             except Exception:
                 self.driver.refresh()
                 time.sleep(2)
@@ -115,7 +119,7 @@ class Battle(Driver):
 
     def start_attack(self):
         try:
-            if self.get_attribute(MAIN_MASK, "style") == "display: block;":  # noqa F405
+            if self.get_attribute(MAIN_MASK, "style") == "display: block;":
                 return True
             else:
                 return False
@@ -124,7 +128,7 @@ class Battle(Driver):
 
     def zero_hp(self):
         try:
-            if self.find_element(ENEMY_HP).text == "0":  # noqa F405
+            if self.find_element(ENEMY_HP).text == "0":
                 return True
             else:
                 return False
@@ -133,7 +137,7 @@ class Battle(Driver):
 
     def battle_end(self):
         try:
-            if self.element_is_displayed(BTN_NEXT):  # noqa F405
+            if self.element_is_displayed(BTN_NEXT):
                 return True
             else:
                 return False

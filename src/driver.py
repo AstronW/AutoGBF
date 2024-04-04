@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 import os
 from logger import logger
-from selector.base import *
 import time
 from bs4 import BeautifulSoup
 from selenium.common.exceptions import WebDriverException
@@ -24,6 +23,17 @@ URL_HOME = "https://game.granbluefantasy.jp/#mypage"
 
 DELAY_TIME = 10
 DELAY_DISPLAY = 60
+LIST_SUMMON = "#cnt-quest > div.prt-supporter-list > div.selected > div"
+LIST_ID_SUMMON = "#cnt-quest > div.prt-supporter-list > div.selected > div > div.prt-supporter-info > div.prt-summon-image"  # noqa E501
+BTN_SUP_OK = "#wrapper > div.contents > div.pop-deck > div.prt-btn-deck > div.btn-usual-ok"
+BTN_OK = "#pop > div > div.prt-popup-footer > div.btn-usual-ok"
+POP0 = "#pop-c-a-i"
+POP = "#pop"
+CODER_INTER = "#c-a-i-frm-group > textarea"
+CODER_SEND = "#c-a-i-frm-group > div"
+CODER_IMAGE = "#pop-c-a-i > div > div.prt-popup-body > div > div > img"
+LIST_TREASURE = "#treasure-list > li > figure"
+LIST_COUNT_TREASURE = "#treasure-list > li > figure > figcaption"
 
 
 class Driver:

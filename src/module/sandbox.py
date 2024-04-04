@@ -1,6 +1,4 @@
 from module.battle import Battle
-from selector.battle import *  # noqa E501
-from selector.base import *  # noqa E501
 import time
 import yaml
 from logger import logger
@@ -20,6 +18,8 @@ URL_ZONE = [
     "https://game.granbluefantasy.jp/#replicard/stage/10",
 ]
 ENEMY_LIST = "#cnt-division > div > div.prt-division-list > div"
+BTN_OK = "#pop > div > div.prt-popup-footer > div.btn-usual-ok"
+BTN_SUP_OK = "#wrapper > div.contents > div.pop-deck > div.prt-btn-deck > div.btn-usual-ok"
 
 
 class Sandbox(Battle):
@@ -63,7 +63,7 @@ class Sandbox(Battle):
                 if self.find_pop():
                     self.send_code()
                     time.sleep(1)
-                self.click_element(BTN_SUP_OK)  # noqa E405
+                self.click_element(BTN_SUP_OK)
                 logger.info("正在等待进入战斗界面")
                 self.wait_url(["#raid", "#raid_multi"])
                 logger.info("开始战斗")
@@ -78,7 +78,7 @@ class Sandbox(Battle):
                     if "chest" in self.get_attribute(enemy_list[0], "class"):
                         enemy_list[0].click()
                         time.sleep(1)
-                        self.click_element(BTN_OK)  # noqa E405
+                        self.click_element(BTN_OK)
                         time.sleep(0.5)
                         self.driver.refresh()
                         time.sleep(0.5)
@@ -90,7 +90,7 @@ class Sandbox(Battle):
                                 self.send_code()
                                 time.sleep(1)
                             enemy_list[0].click()
-                            self.click_element(BTN_SUP_OK)  # noqa E405
+                            self.click_element(BTN_SUP_OK)
                             self.wait_url(["#raid", "#raid_multi"])
                             logger.info("宝箱怪战斗开始")
                             self.full_auto()
@@ -103,7 +103,7 @@ class Sandbox(Battle):
                         if self.find_pop():
                             self.send_code()
                             time.sleep(1)
-                        self.click_element(BTN_SUP_OK)  # noqa E405
+                        self.click_element(BTN_SUP_OK)
                         self.wait_url(["#raid", "#raid_multi"])
                         logger.info("buff怪战斗开始")
                         self.full_auto()
@@ -117,7 +117,7 @@ class Sandbox(Battle):
                         if self.find_pop():
                             self.send_code()
                             time.sleep(1)
-                        self.click_element(BTN_SUP_OK)  # noqa E405
+                        self.click_element(BTN_SUP_OK)
                         self.wait_url(["#raid", "#raid_multi"])
                         logger.info("buff怪战斗开始")
                         self.full_auto()

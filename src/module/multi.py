@@ -1,6 +1,4 @@
 from module.battle import Battle
-from selector.battle import *  # noqa E501
-from selector.base import *  # noqa E501
 import time
 import yaml
 import re
@@ -35,7 +33,7 @@ class Multi(Battle):
     def find_raid(self, hp_upper, hp_lower, joined_upper, joined_lower, method):
         logger.info("正在寻找合适的副本")
         while True:
-            h = self.driver.execute_script(CHROME_HEIGHT)  # noqa E405
+            h = self.driver.execute_script(CHROME_HEIGHT)
             offset = (h - 43) // 81 - 2
             firstpage = (h - 500) // 81
             ref = False
