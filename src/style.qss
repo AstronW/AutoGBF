@@ -67,8 +67,9 @@ QSpinBox.cap::up-button, QSpinBox.cap::down-button {
     width: 0;
 }
 
-QTextBrowser {
-	font-size: 12px;
+QTextBrowser, QTextEdit {
+	font-size: 14px;
+    line-height: 200%;
 	min-width: 400px;
 }
 

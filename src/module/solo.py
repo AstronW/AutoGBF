@@ -1,73 +1,59 @@
-from module.battle import Battle
+from autogbf import AutoGBF
+from config import ConfigManager
 import time
-import yaml
-from logger import logger
-import traceback
+import logging
+logger = logging.getLogger("autogbf")
 
 
-URL_HOME = "https://game.granbluefantasy.jp/#mypage"
-BTN_OK = "#pop > div > div.prt-popup-footer > div.btn-usual-ok"
-
-
-class Solo(Battle):
+class Solo(AutoGBF):
 
     def __init__(self, parent=None):
-        super().__init__()
+        AutoGBF.__init__(self)
         self.parent = parent
-        self.driver = self.parent.driver.driver
 
-    def start_mission(self):
-        try:
-            with open("config.yaml") as f:
-                self.data = yaml.load(f, Loader=yaml.FullLoader)
-            url = self.data["solo"]["url"]
-            summon_id = self.data["solo"]["summon_id"]
-            method = self.data["solo"]["method"]
-            repeat_times = self.data["solo"]["repeat_times"]
-            treasure_id = self.data["solo"]["treasure_id"]
-            treasure_count = self.data["solo"]["treasure_count"]
-            logger.info("=" * 28)
-            logger.attr("summon_id", summon_id)
-            logger.attr("method", method)
+    def start(self):
+        data = ConfigManager("solo")
+        url = data.get_config("url")
+        summon_id = data.get_config("summon_id")
+        repeat_times = data.get_config("repeat_times")
+        treasure_id = data.get_config("treasure_id")
+        treasure_count = data.get_config("treasure_count")
+        custom = data.get_config("custom")
+        logger.hr(1)
+        logger.attr("url", url[32:])
+        logger.attr("summon_id", summon_id)
+        if repeat_times != 0:
             logger.attr("repeat_times", repeat_times)
+        if treasure_count != 0:
             logger.attr("treasure_id", treasure_id)
             logger.attr("treasure_count", treasure_count)
+        if custom != "无":
+            logger.attr("custom", custom)
 
-            time.sleep(1)
+        count = 0
 
-            count = 0
+        while (
+            (not repeat_times + treasure_count)
+            | (repeat_times > count)
+            | (self.find_treasure(treasure_id) < treasure_count)
+        ):
+            logger.hr(2)
+            time_start = time.time()
+            logger.info(f"开始第{count+1}次任务")
+            self.get(url)
+            self.find_summon(summon_id)
+            try:
+                self.battle(custom=custom)
+            except Exception:
+                logger.exception("战斗失败")
+            count += 1
+            time_stop = time.time()
+            time_cost = time.strftime("%H:%M:%S", time.gmtime(time_stop - time_start))
+            logger.info(f"任务结束，用时{time_cost}")
+            if self.parent.quit is True:
+                return
 
-            while (
-                (not repeat_times + treasure_count)
-                | (repeat_times > count)
-                | (self.find_treasure(treasure_id) < treasure_count)
-            ):
-                logger.info('-' * 50)
-                logger.info(f"开始第{count+1}次任务")
-                self.get_url(url)
-                time.sleep(0.5)
-                while not self.find_summon(summon_id):
-                    self.get_url(url)
-                    time.sleep(0.5)
-                time.sleep(0.5)
-                if "stage" in self.driver.current_url:
-                    self.click_element(BTN_OK)  # noqa F405
-                logger.info("正在等待进入战斗界面")
-                self.wait_url(["#raid", "#raid_multi"])
-                logger.info("开始战斗")
-                if method == 1:
-                    self.full_auto()
-                elif method == 2:
-                    self.full_auto(False)
-                logger.info("战斗结束")
-                count += 1
 
-                if self.parent.quit is True:
-                    break
-                time.sleep(1)
-            logger.info('-' * 50)
-            logger.info("任务已结束")
-            self.get_url(URL_HOME)
-        except Exception as e:
-            logger.error(e)
-            logger.debug("\n" + traceback.format_exc())
+if __name__ == "__main__":
+    mission = Solo()
+    mission.start()
