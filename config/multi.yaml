@@ -1,0 +1,12 @@
+custom: '大巴'
+repeat_times: 0
+summon_id: '2040094000'
+treasure_count: 0
+treasure_id: '10554'
+method: 1
+hp_min: 30
+hp_max: 100
+join_min: 0
+join_max: 30
+goal_turn: 2
+

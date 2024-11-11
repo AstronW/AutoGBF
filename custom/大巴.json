@@ -1,0 +1,85 @@
+[
+    {
+        "type": "ability",
+        "user": 4,
+        "ability_number": 3,
+        "target": 0,
+        "is_fa": null,
+        "ability_sub_param": [],
+        "name": "Oblivion +"
+    },
+    {
+        "type": "refresh"
+    },
+    {
+        "type": "summon",
+        "target": 2,
+        "is_fa": 1,
+        "name": "Home at Last"
+    },
+    {
+        "type": "refresh"
+    },
+    {
+        "type": "ability",
+        "user": 5,
+        "ability_number": 4,
+        "target": 0,
+        "is_fa": true,
+        "ability_sub_param": 0,
+        "name": "Days of Redemption"
+    },
+    {
+        "type": "refresh"
+    },
+    {
+        "type": "ability",
+        "user": 1,
+        "ability_number": 2,
+        "target": 0,
+        "is_fa": true,
+        "ability_sub_param": 0,
+        "name": "Tag Team"
+    },
+    {
+        "type": "refresh"
+    },
+    {
+        "type": "ability",
+        "user": 2,
+        "ability_number": 3,
+        "target": 0,
+        "is_fa": true,
+        "ability_sub_param": 0,
+        "name": "Koenig Dekret"
+    },
+    {
+        "type": "refresh"
+    },
+    {
+        "type": "attack",
+        "is_fa": true,
+        "guard": [
+            0,
+            0,
+            0,
+            0
+        ]
+    },
+    {
+        "type": "refresh"
+    },
+    {
+        "type": "attack",
+        "is_fa": true,
+        "guard": [
+            0,
+            0,
+            0,
+            0
+        ]
+    },
+    {
+        "type": "mypage"
+    }
+]
