@@ -14,7 +14,7 @@ class Battle:
 
     def start_battle(self, goal_turn : int = 0, custom : str = None):
         logger.info("开始战斗")
-        if custom:
+        if custom and custom != '':
             return self.custom_battle(goal_turn, custom)
         count_turn = 0
         while True:

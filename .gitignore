@@ -4,3 +4,4 @@ common/__pycache__/
 log/
 module/__pycache__/
 test.ipynb
+/__pycache__

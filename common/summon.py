@@ -17,13 +17,12 @@ class Summon:
             status = get_status(packet)
             match status:
                 case Status.SUPPORT:
-                    summon =  self.click_summon(sum_id)
+                    self.click_summon(sum_id)
                 case Status.CODE_FALSE | Status.CODE_POP:
                     res, image = self.ocr.send_code()
                 case Status.CODE_TRUE:
                     cv2.imwrite(f"assets/img/{res}.png", image)
-                    summon.run_js("this.scrollIntoView()")
-                    summon.click()
+                    self.click_summon(sum_id)
                 case Status.PARTY_CLICK:
                     self.page.ele(Loc.BTN_OK).click()
                 case Status.NET_ERROR:

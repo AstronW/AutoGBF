@@ -45,7 +45,7 @@ class Pat(Enum):
     RAID_INIT = r"quest/init_quest"
     RAID_START = r"(multi)?raid/start"
     RESULT = r"result(multi)?/content/index"
-    SUPPORT = r"quest/content/supporter_raid"
+    SUPPORT = r"quest/content/supporter"
     SUM = r"quest/decks_info"
     CODE = r"/c/a\?_="
     RAID_CREATE = r"(?<!(model/))quest/(raid_deck_data_)?create"

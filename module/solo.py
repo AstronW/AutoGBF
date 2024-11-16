@@ -21,7 +21,11 @@ class Solo(AutoGBF):
             | (self.find_treasure(treasure_id) < treasure_count)
         ):
             logger.info(f"开始第{count+1}次任务")
-            self.page.get(url)
+            if self.page.url != url:
+                self.page.get(url)
+            else:
+                self.page.refresh()
+                self.page.wait.doc_loaded()
             self.find_summon(summon_id)
             self.start_battle()
             count += 1
