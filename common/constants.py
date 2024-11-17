@@ -40,19 +40,10 @@ class Url:
     RAID_DETAIL_URL = "https://game.granbluefantasy.jp/#quest/supporter_raid/{multi_raid_id}/{quest_id}/1/{used_battle_point}/0/7"
     PENDING_BATTLE = "https://game.granbluefantasy.jp/#quest/assist/unclaimed/0/0"
 
-class Pat(Enum):
-    ATT = r"(multi)?raid/((normal_attack|ability|summon)_result)"
-    RAID_INIT = r"quest/init_quest"
-    RAID_START = r"(multi)?raid/start"
-    RESULT = r"result(multi)?/content/index"
-    SUPPORT = r"quest/content/supporter"
-    SUM = r"quest/decks_info"
-    CODE = r"/c/a\?_="
-    RAID_CREATE = r"(?<!(model/))quest/(raid_deck_data_)?create"
-    ASSIST_LIST = r"quest/(assist/search/)?assist_list"
-    RAID_CHECK = r"quest/check_multi_start"
-    MYPAGE = r"css/user/mypage.css"
-    PLAYER_STATUS = r"quest/content/newassist"
 
-
-ABILITY_LIST = ['Koenig Dekret', 'ケーニヒ・ベシュテレン', 'ツープラトン', 'Tag Team']
+ABILITY_LIST = [
+    'Koenig Dekret',
+    'Tag Team',
+    'ケーニヒ・ベシュテレン',
+    'ツープラトン',
+]

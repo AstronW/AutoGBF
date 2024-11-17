@@ -1,7 +1,6 @@
 from common.base import BasePage
 from common.summon import Summon
 from common.battle import Battle
-from common.constants import Pat
 from common.treasure import Treasure
 from common.raid import Raid
 from common.record import Record
@@ -16,14 +15,7 @@ class AutoGBF(BasePage):
         self.record = Record(self.page)
 
     def start_listen(self):
-        list_pat = []
-        
-        for i in Pat:
-            list_pat.append(i.value)
-
-        self.page.listen.start(list_pat, is_regex=True)
-        # self.page.listen.start([Pat.ATT, Pat.RAID_START, Pat.RESULT, Pat.SUM, Pat.CODE, Pat.RAID_CREATE, Pat.ASSIST_LIST, Pat.RAID_CHECK],
-        #                        is_regex=True)
+        self.page.listen.start(targets='game.granbluefantasy.jp', res_type='XHR')
     
     def find_raid(self, raid_data : tuple, method : int, ):
         return self.raid.find_raid(raid_data, method)

@@ -48,9 +48,9 @@ class Multi(AutoGBF):
             while not self.find_summon(summon_id):
                 self.find_raid((hp_min, hp_max, join_min, join_max), method)
             status = self.start_battle(goal_turn, custom)
-            if status in [Status.RAID_LOSE, Status.TURN_ENOUGH]:
+            if status in [Status.BATTLE_LOSE, Status.BATTLE_TURN_ENOUGH]:
                 count_wait_raid += 1
-            elif status == Status.RAID_EMPTY:
+            elif status == Status.BATTLE_RESULT_EMPTY:
                 count -= 1
 
             count += 1

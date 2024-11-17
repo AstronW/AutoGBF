@@ -5,3 +5,5 @@ log/
 module/__pycache__/
 test.ipynb
 /__pycache__
+config/
+url.txt

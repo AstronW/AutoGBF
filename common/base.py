@@ -22,9 +22,10 @@ class BasePage:
         co.set_argument('useAutomationExtension', False)
         co.set_argument('excludeSwitches', ['enable-automation'])
         co.set_argument('--disable-background-networking')    # 关闭更新提示
+        co.set_load_mode('eager')
         self.chromium = Chromium(co)
         self.chromium.set.auto_handle_alert(True)
-        self.chromium.set.timeouts(base=10, page_load=20,script=10)
+        self.chromium.set.timeouts(base=10, page_load=10,script=10)
         self.chromium.set.retry_times(5)
         self.chromium.set.retry_interval(2)
         self.page : MixTab = self.chromium.get_tab(1)

@@ -13,30 +13,30 @@ class Summon:
 
     def find_summon(self, sum_id : str):
         logger.info("开始寻找召唤石")
-        for packet in self.page.listen.steps(timeout=10):
-            status = get_status(packet)
-            match status:
-                case Status.SUPPORT:
-                    self.click_summon(sum_id)
-                case Status.CODE_FALSE | Status.CODE_POP:
-                    res, image = self.ocr.send_code()
-                case Status.CODE_TRUE:
-                    cv2.imwrite(f"assets/img/{res}.png", image)
-                    self.click_summon(sum_id)
-                case Status.PARTY_CLICK:
-                    self.page.ele(Loc.BTN_OK).click()
-                case Status.NET_ERROR:
-                    self.page.refresh()
-                    self.page.wait.doc_loaded()
-                case Status.RAID_CREATE_FALSE:
-                    return False
-                case Status.RAID_CREATE:
-                    return True
-                case _:
-                    pass
-        self.page.refresh()
-        self.page.wait.doc_loaded()
-        return self.find_summon(sum_id)
+        while True:
+            for packet in self.page.listen.steps(timeout=10):
+                status = get_status(packet)
+                match status:
+                    case Status.SUMMON_INIT:
+                        self.click_summon(sum_id)
+                    case Status.CODE_FALSE | Status.CODE_INIT:
+                        res, image = self.ocr.send_code()
+                    case Status.CODE_TRUE:
+                        cv2.imwrite(f"assets/img/{res}.png", image)
+                        self.click_summon(sum_id)
+                    case Status.CODE_NONE:
+                        self.page.ele(Loc.BTN_OK).click()
+                    case Status.NET_ERROR:
+                        self.page.refresh()
+                        self.page.wait.doc_loaded()
+                    case Status.SUMMON_DISABLE:
+                        return False
+                    case Status.SUMMON_ENABLE:
+                        return True
+                    case _:
+                        pass
+            self.page.refresh()
+            self.page.wait.doc_loaded()
     
     def click_summon(self, sum_id : str):
         list_summon_id = [sum_id + '_04', sum_id + '_03', sum_id + '_02', sum_id]

@@ -1,84 +1,99 @@
 from enum import Enum, auto
 from DrissionPage._units.listener import DataPacket
 import re
-from common.constants import ABILITY_LIST, Pat
+from common.constants import ABILITY_LIST
 from logger import logger
 
 
 class Status(Enum):
+    ## 副本选择
+    ASSIST_INIT = auto()
+    ASSIST_ENABLE = auto()
+    ASSIST_DISABLE = auto()
+    RAID_ENABLE = auto()
+    RAID_DISABLE = auto()
+    ## 召唤石选择
+    SUMMON_INIT = auto()
+    SUMMON_ENABLE = auto()
+    SUMMON_DISABLE = auto()
+    ## 验证码
+    CODE_INIT = auto()
     CODE_TRUE = auto()
     CODE_FALSE = auto()
-    CODE_POP = auto()
-    SUPPORT = auto()
-    ASSIST_NONE = auto()
-    ASSIST_ENABLE = auto()
-    PLAYER_STATUS = auto()
-    RAID_UNABLE = auto()
-    RAID_ENABLE = auto()
-    PARTY_CLICK = auto()
-    RAID_CREATE = auto()
-    RAID_CREATE_FALSE = auto()
-    RAID_INIT = auto()
-    RAID_START = auto()
-    RAID_ERROR = auto()
-    RAID_TRIGGER = auto()
-    RAID_LOSE = auto()
-    RAID_FINISH = auto()
-    RAID_EMPTY = auto()
-    RAID_RESULT = auto()
-    RAID_RESULT_EMPTY = auto()
-    TURN_ENOUGH = auto()
-    TURN_END = auto()
-    SUMMON_RESULT_DIE = auto()
-    ABILITY_RESULT_DIE = auto()
-    NEED_BACK = auto()
-    LONG_ABILITY = auto()
-    ABILITY_RESULT = auto()
-    NORMAL_ATTACK_RESULT = auto()
-    SUMMON_RESULT = auto()
-    ATTACK_RESULT = ABILITY_RESULT | SUMMON_RESULT | NORMAL_ATTACK_RESULT
-    NEED_REFRESH = RAID_ERROR | RAID_FINISH | NORMAL_ATTACK_RESULT | LONG_ABILITY | SUMMON_RESULT_DIE | ABILITY_RESULT_DIE
+    CODE_NONE = auto()
+    ## 战斗
+    BATTLE_INIT = auto()
+    BATTLE_START = auto()
+    BATTLE_TRIGGER = auto()
+    BATTLE_FINISH = auto()
+    BATTLE_TURN_ENOUGH = auto()
+    BATTLE_LOSE = auto()
+    BATTLE_TURN_END = auto()
+    BATTLE_BACK = auto()
+    BATTLE_LONG_ABILITY = auto()
+    BATTLE_DIE = auto()
+    BATTLE_NORMAL_ATTACK = auto()
+    BATTLE_ABILITY = auto()
+    BATTLE_SUMMON = auto()
+    ## 战斗结果
+    # BATTLE_EMPTY = auto()
+    BATTLE_RESULT = auto()
+    BATTLE_RESULT_EMPTY = auto()
+    ## 网络错误
     NET_ERROR = auto()
+    ## 无状态
     NOTHING = auto()
 
 
 def get_status(packet: DataPacket):
-    logger.info(packet.url)
+    # logger.info(packet.url)
     if packet.is_failed:
         return Status.NET_ERROR
-    # 验证码
-    elif re.search(Pat.CODE.value, packet.url):
+    ## 副本选择
+    if 'newassist' in packet.url:
+        return Status.ASSIST_INIT
+    elif 'assist_list' in packet.url:
+        data = packet.response.body.get("assist_raids_data")
+        if data is None or data == []:
+            return Status.ASSIST_DISABLE
+        else:
+            return Status.ASSIST_ENABLE
+    elif 'check_multi_start' in packet.url:
+        pop = packet.response.body.get("popup")
+        if pop:
+            return Status.RAID_DISABLE
+        else:
+            return Status.RAID_ENABLE
+    ## 召唤石选择
+    elif 'content/supporter' in packet.url:
+        return Status.SUMMON_INIT
+    elif re.search('quest/(raid_deck_data_)?create', packet.url):
+        if "error" in packet.response.body or "popup" in packet.response.body:
+            return Status.SUMMON_DISABLE
+        else:
+            return Status.SUMMON_ENABLE
+    ## 验证码
+    elif 'decks_info' in packet.url:
+        if "popup" in packet.response.body:
+            return Status.CODE_INIT
+        else:
+            return Status.CODE_NONE
+    elif '/c/a?_=' in packet.url:
         if packet.response.body.get("is_correct"):
             return Status.CODE_TRUE
         else:
             return Status.CODE_FALSE
-    # 召唤石
-    elif re.search(Pat.SUPPORT.value, packet.url):
-        return Status.SUPPORT
-    elif re.search(Pat.SUM.value, packet.url):
-        if "popup" in packet.response.body:
-            return Status.CODE_POP
-        else:
-            return Status.PARTY_CLICK
-    elif re.search(Pat.RAID_CREATE.value, packet.url):
-        if "error" in packet.response.body or "popup" in packet.response.body:
-            return Status.RAID_CREATE_FALSE
-        else:
-            return Status.RAID_CREATE
-    # 战斗
-    elif re.search(Pat.RAID_INIT.value, packet.url):
-        return Status.RAID_INIT
-    elif re.search(Pat.RAID_START.value, packet.url):
+    ## 战斗
+    elif 'init_quest' in packet.url:
+        return Status.BATTLE_INIT
+    elif 'raid/start' in packet.url:
         if packet.response.body == "":
-            return Status.RAID_ERROR
+            return Status.NET_ERROR
         elif packet.response.body.get("scenario"):
-            return Status.RAID_TRIGGER
+            return Status.BATTLE_TRIGGER
         else:
-            return Status.RAID_START
-    elif re.search(Pat.ATT.value, packet.url):
-        status = None
-        die = False
-        long_ability = False
+            return Status.BATTLE_START
+    elif 'normal_attack_result' in packet.url:
         scenarios = packet.response.body.get("scenario")
         if scenarios is None or scenarios == []:
             return Status.NET_ERROR
@@ -88,14 +103,34 @@ def get_status(packet: DataPacket):
             cmd = scenario.get("cmd")
             match cmd:
                 case "lose":
-                    return Status.RAID_LOSE
+                    return Status.BATTLE_LOSE
                 case "finished":
-                    return Status.TURN_END
+                    return Status.BATTLE_FINISH
                 case "win":
                     if scenario.get("is_last_raid"):
-                        return Status.TURN_END
+                        return Status.BATTLE_FINISH
                     else:
-                        return Status.NEED_BACK
+                        return Status.BATTLE_BACK
+        return Status.BATTLE_NORMAL_ATTACK
+    elif 'ability_result' in packet.url:
+        long_ability, die = False, False
+        scenarios = packet.response.body.get("scenario")
+        if scenarios is None or scenarios == []:
+            return Status.NET_ERROR
+        for scenario in scenarios:
+            if scenario == []:
+                continue
+            cmd = scenario.get("cmd")
+            match cmd:
+                case "lose":
+                    return Status.BATTLE_LOSE
+                case "finished":
+                    return Status.BATTLE_FINISH
+                case "win":
+                    if scenario.get("is_last_raid"):
+                        return Status.BATTLE_FINISH
+                    else:
+                        return Status.BATTLE_BACK
                 case "ability":
                     if scenario.get("name") in ABILITY_LIST:
                         long_ability = True
@@ -103,42 +138,42 @@ def get_status(packet: DataPacket):
                     if scenario.get("to") == "player":
                         die = True
         if long_ability:
-            return Status.LONG_ABILITY
-        elif 'attack' in packet.url:
-            return Status.TURN_END
-        elif 'ability' in packet.url:
-            if die:
-                return Status.ABILITY_RESULT_DIE
-            else:
-                return Status.ABILITY_RESULT
-        elif 'summon' in packet.url:
-            if die:
-                return Status.SUMMON_RESULT_DIE
-            else:
-                return Status.SUMMON_RESULT
+            return Status.BATTLE_LONG_ABILITY
+        elif die:
+            return Status.BATTLE_DIE
         else:
-            return Status.NOTHING
-    # 战斗结果
-    elif re.search(Pat.RESULT.value, packet.url):
+            return Status.BATTLE_ABILITY
+    elif 'summon_result' in packet.url:
+        long_ability, die = False, False
+        scenarios = packet.response.body.get("scenario")
+        if scenarios is None or scenarios == []:
+            return Status.NET_ERROR
+        for scenario in scenarios:
+            if scenario == []:
+                continue
+            cmd = scenario.get("cmd")
+            match cmd:
+                case "lose":
+                    return Status.BATTLE_LOSE
+                case "finished":
+                    return Status.BATTLE_FINISH
+                case "win":
+                    if scenario.get("is_last_raid"):
+                        return Status.BATTLE_FINISH
+                    else:
+                        return Status.BATTLE_BACK
+                case "die":
+                    if scenario.get("to") == "player":
+                        die = True
+        if die:
+            return Status.BATTLE_DIE
+        else:
+            return Status.BATTLE_SUMMON
+    ## 战斗结果
+    elif re.search('result(multi)?/content/index', packet.url):
         if 'redirect' in packet.response.body:
-            return Status.RAID_RESULT_EMPTY
+            return Status.BATTLE_RESULT_EMPTY
         else:
-            return Status.RAID_RESULT
-    # 副本选择
-    elif re.search(Pat.PLAYER_STATUS.value, packet.url):
-        return Status.PLAYER_STATUS
-    elif "assist_list" in packet.url:
-        data = packet.response.body.get("assist_raids_data")
-        if data is None or data == []:
-            return Status.ASSIST_NONE
-        else:
-            return Status.ASSIST_ENABLE
-    elif re.search(Pat.RAID_CHECK.value, packet.url):
-        pop = packet.response.body.get("popup")
-        if pop:
-            return Status.RAID_UNABLE
-        else:
-            return Status.RAID_ENABLE
+            return Status.BATTLE_RESULT
     else:
         return Status.NOTHING
-

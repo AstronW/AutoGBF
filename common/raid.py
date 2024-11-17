@@ -34,16 +34,15 @@ class Raid:
         while True: 
             for packet in self.page.listen.steps(timeout=10):
                 status = get_status(packet)
-                print(status)
                 match status:
                     case Status.NET_ERROR:
                         self.page.refresh()
                         self.page.wait.doc_loaded()
-                    case Status.ASSIST_NONE:
+                    case Status.ASSIST_DISABLE:
                         self.page.ele(Loc.RAID_REFRESH).click()
                     case Status.ASSIST_ENABLE:
                         self.click_raid(packet, data)
-                    case Status.RAID_UNABLE:
+                    case Status.RAID_DISABLE:
                         self.page.ele(Loc.BTN_OK).click()
                         self.page.ele(Loc.RAID_REFRESH).click()
                     case Status.RAID_ENABLE:
@@ -59,16 +58,15 @@ class Raid:
         while True:
             for packet in self.page.listen.steps(timeout=10):
                 status = get_status(packet)
-                print(status)
                 match status:
                     case Status.NET_ERROR:
                         self.page.refresh()
                         self.page.wait.doc_loaded()
-                    case Status.ASSIST_NONE:
+                    case Status.ASSIST_DISABLE:
                         self.page.ele(Loc.RAID_REFRESH_EVENT).click()
                     case Status.ASSIST_ENABLE:
                         self.click_raid(packet, data, 1)
-                    case Status.RAID_UNABLE:
+                    case Status.RAID_DISABLE:
                         self.page.ele(Loc.BTN_OK).click()
                         self.page.ele(Loc.RAID_REFRESH_EVENT).click()
                     case Status.RAID_ENABLE:
@@ -90,9 +88,9 @@ class Raid:
                     case Status.NET_ERROR:
                         self.page.refresh()
                         self.page.wait.doc_loaded()
-                    case Status.PLAYER_STATUS:
+                    case Status.ASSIST_INIT:
                         self.recover_bp(packet)
-                    case Status.ASSIST_NONE:
+                    case Status.ASSIST_DISABLE:
                         self.page.ele(Loc.RAID_REFRESH).click()
                     case Status.ASSIST_ENABLE:
                         if self.click_raid(packet, data, 2):
