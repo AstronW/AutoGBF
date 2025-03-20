@@ -1,9 +1,8 @@
-UserData/
+.venv/
+.vscode/
+assets/treasure/
 assets/img/
-common/__pycache__/
-log/
-module/__pycache__/
-test.ipynb
-/__pycache__
-config/
-url.txt
+custom/*
+log/*
+UserData/
+config.json
